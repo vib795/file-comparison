@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comparison Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.js"></script>
+    <style>
+        .add { background-color: #ddffdd; }
+        .del { background-color: #ffdddd; }
+        .none { background-color: #f8f8f8; }
+        table { width: 100%; table-layout: fixed; }
+        td { width: 50%; }
+        pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
+    </style>
+</head>
+<body>
+    <h1>Comparison Results</h1>
+    <table>
+        <tr>
+            <th>File 1</th>
+            <th>File 2</th>
+        </tr>
+        {% for line_left, line_right in diff_pairs %}
+        <tr>
+            <td class="{{ line_left[1] }}"><pre><code class="language-python">{{ line_left[0] }}</code></pre></td>
+            <td class="{{ line_right[1] }}"><pre><code class="language-python">{{ line_right[0] }}</code></pre></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/">Back</a>
+</body>
+</html>
