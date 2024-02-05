@@ -1,21 +1,51 @@
-# Use an official Python runtime as a parent image
-FROM python:3.12.1-alpine
+# Use Ubuntu 22.04 as base image
+FROM ubuntu:24.04
 
-# Set the working directory in the container
-WORKDIR /app
+# Set environment variables to avoid interactive dialog during installation
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Update the package repository and install packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    python3-venv \
+    git \
+    git-extras && \
+    # Clean up
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Create a new user 'appuser'
+RUN useradd -m appuser
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Switch to the new user
+USER appuser
 
-# Define environment variable
-ENV FLASK_APP=app.py
+# Set the working directory
+WORKDIR /home/appuser
+
+# Create a virtual environment
+RUN python3 -m venv venv
+
+# Activate the virtual environment
+ENV PATH="/home/appuser/venv/bin:$PATH"
+
+# Copy your Flask app to the container
+COPY --chown=appuser:appuser . /home/appuser/app
+
+# Install Python dependencies within the virtual environment
+RUN pip install --no-cache-dir -r /home/appuser/app/requirements.txt
+
+# Set the environment variable for Flask
+ENV FLASK_APP=/home/appuser/app/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
-# Run app.py when the container launches
-CMD ["flask", "run"]
+# Expose the port your app runs on
+EXPOSE 5000
+
+# Set the working directory to your app directory
+WORKDIR /home/appuser/app
+
+# Set the default command to run your app
+CMD ["flask", "run", "--host=0.0.0.0"]
