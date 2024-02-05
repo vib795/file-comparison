@@ -2054,3 +2054,4 @@ venv/lib/python3.11/site-packages/werkzeug/wrappers/request.py
 venv/lib/python3.11/site-packages/werkzeug/wrappers/response.py
 venv/lib/python3.11/site-packages/werkzeug/wsgi.py
 venv/pyvenv.cfg
+__pycache__/
