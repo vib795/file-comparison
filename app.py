@@ -1,16 +1,32 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import difflib
+import os
 
 app = Flask(__name__)
-
-# Make `zip` available in Jinja2 templates
-app.jinja_env.globals.update(zip=zip)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        file1_lines = request.form['file1'].splitlines()
-        file2_lines = request.form['file2'].splitlines()
+        # Initialize variables to store file or text content
+        file1_content, file2_content = None, None
+
+        # Handle file upload for file1
+        file1 = request.files['file1']
+        if file1 and file1.filename != '':
+            file1_content = file1.read().decode('utf-8')
+        else:
+            file1_content = request.form['content1']
+
+        # Handle file upload for file2
+        file2 = request.files['file2']
+        if file2 and file2.filename != '':
+            file2_content = file2.read().decode('utf-8')
+        else:
+            file2_content = request.form['content2']
+
+        # Split the contents into lines for comparison
+        file1_lines = file1_content.splitlines()
+        file2_lines = file2_content.splitlines()
 
         # Generate a diff
         diff = difflib.ndiff(file1_lines, file2_lines)
@@ -28,10 +44,9 @@ def index():
                 diff_left.append((line[2:], 'none'))
                 diff_right.append((line[2:], 'none'))
 
-        # Pass the zipped result to the template
-        diff_pairs = zip(diff_left, diff_right)
-        
-        return render_template('results.html', diff_pairs=diff_pairs)
+        # Render the comparison results
+        return render_template('results.html', diff_left=diff_left, diff_right=diff_right)
+
     return render_template('index.html')
 
 if __name__ == '__main__':

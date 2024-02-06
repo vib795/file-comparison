@@ -4,81 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparison Results</title>
-    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.css" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             padding: 20px;
             margin: 0;
+            overflow-x: hidden;
         }
-        h1 {
-            color: #333;
-            text-align: center;
+        .diff-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
-        .scrollable-container {
-            max-height:75vh; /* Adjust based on your preference */
-            overflow-y: auto;
+        .diff {
+            width: 49%;
             border: 1px solid #ddd;
-            margin-top: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            background-color: #fff;
-        }
-        th, td {
+            overflow-x: auto;
             padding: 10px;
-            border: none; /* Remove borders between rows */
-            text-align: left;
-            width: 50%;
+            height: 80vh;
+            overflow-y: auto;
         }
-        th {
-            background-color: #007bff;
-            color: #fff;
-        }
-        .add { background-color: #ddffdd; }
-        .del { background-color: #ffdddd; }
-        .none { background-color: #f8f8f8; }
-        pre {
+        .line {
             white-space: pre-wrap;
-            word-wrap: break-word;
-            margin: 0;
+            font-family: monospace;
         }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 4px;
-            text-align: center;
-        }
-        a:hover {
-            background-color: #0056b3;
-        }
+        .add { background-color: #e6ffed; }
+        .del { background-color: #ffeef0; }
     </style>
 </head>
 <body>
+<div class="container-fluid">
     <h1>Comparison Results</h1>
-    <div class="scrollable-container">
-        <table>
-            <tr>
-                <th>File 1</th>
-                <th>File 2</th>
-            </tr>
-            {% for line_left, line_right in diff_pairs %}
-            <tr>
-                <td class="{{ line_left[1] }}"><pre><code class="language-python">{{ line_left[0] }}</code></pre></td>
-                <td class="{{ line_right[1] }}"><pre><code class="language-python">{{ line_right[0] }}</code></pre></td>
-            </tr>
+    <div class="diff-container">
+        <div class="diff" id="diff1">
+            <h2>File 1</h2>
+            {% for line, class in diff_left %}
+                <div class="line {{class}}">{{ line }}</div>
             {% endfor %}
-        </table>
+        </div>
+        <div class="diff" id="diff2">
+            <h2>File 2</h2>
+            {% for line, class in diff_right %}
+                <div class="line {{class}}">{{ line }}</div>
+            {% endfor %}
+        </div>
     </div>
-    <a href="/">Back</a>
+    <a href="/" class="btn btn-primary">Compare Other Files</a>
+</div>
+<script>
+    let scrollSync = function(source, target) {
+        source.addEventListener('scroll', () => {
+            target.scrollTop = source.scrollTop;
+        });
+    };
+
+    let diff1 = document.getElementById('diff1');
+    let diff2 = document.getElementById('diff2');
+
+    scrollSync(diff1, diff2);
+    scrollSync(diff2, diff1);
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

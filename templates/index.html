@@ -3,56 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Compare</title>
+    <title>File Comparison Tool</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-            margin: 0;
-        }
-        h1 {
-            color: #333;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            font-weight: bold;
-        }
-        textarea {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-family: monospace;
-        }
-        input[type="submit"] {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
+        /* Directly target textarea elements within the form */
+        form textarea {
+            height: 60vh; /* Set the height to occupy 60% of the viewport height */
+            min-height: 550px; /* Ensure a minimum height for smaller screens */
         }
     </style>
 </head>
 <body>
-    <h1>File Compare Tool</h1>
-    <form action="/" method="post">
-        <label for="file1">File 1:</label><br>
-        <textarea id="file1" name="file1" rows="20" cols="50"></textarea><br>
-        <label for="file2">File 2:</label><br>
-        <textarea id="file2" name="file2" rows="20" cols="50"></textarea><br>
-        <input type="submit" value="Compare">
+<div class="container mt-5">
+    <h1>Upload Files to Compare or Paste Content</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="file1">Select first file:</label>
+                    <input type="file" class="form-control-file" id="file1" name="file1">
+                    <small class="form-text text-muted">Or paste content below.</small>
+                    <textarea id="content1" name="content1" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="file2">Select second file:</label>
+                    <input type="file" class="form-control-file" id="file2" name="file2">
+                    <small class="form-text text-muted">Or paste content below.</small>
+                    <textarea id="content2" name="content2" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Compare</button>
     </form>
+</div>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
