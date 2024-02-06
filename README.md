@@ -5,10 +5,10 @@ This application is a Flask-based web tool that allows users to perform side-by-
 
 ## Features
 
-- Side-by-Side Comparison: Visually compare two files side by side to easily identify added, removed, or unchanged lines.
-- Syntax Highlighting: Enhances readability and comprehension by highlighting syntax for various programming languages.
-- User-Friendly Interface: Simple and intuitive web interface for uploading or pasting file contents for comparison.
-- Customizable: Open-source and easily modifiable to add more features or support for additional file types.
+- **Side-by-Side Comparison:** Visually compare two files side by side to easily identify added, removed, or unchanged lines.
+- **Syntax Highlighting:** Enhances readability and comprehension by highlighting syntax for various programming languages.
+- **User-Friendly Interface:** Simple and intuitive web interface for uploading or pasting file contents for comparison.
+- **Customizable:** Open-source and easily modifiable to add more features or support for additional file types.
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-- Python 3.6+
+- Python 3.11.7
 - Flask
 - A modern web browser
 
@@ -45,6 +45,32 @@ flask run
 
 Visit `http://localhost:5000` in your web browser to use the application.
 
+## Running it using Docker
+- Make sure you have [**Docker**](https://www.docker.com/products/docker-desktop/) installed. 
+
+- Run 
+    ```bash
+    cd file-comparison
+    ```
+- Run 
+    ```bash
+    docker compose up --build
+    ```
+    and then to destroy the container run
+    ```bash
+    docker compose down
+    ```
+    OR <br/>
+    You can download and run a pre built image from the public repository [utkarshsingh/file-comparison](https://hub.docker.com/r/utkarshsingh/file-comparison) by running the command:
+    ```bash
+    docker run -p 5000:5000 --name file-comparison \
+            utkarshsingh/file-comparison
+    ```
+    and then to detroy the container run:
+    ```bash
+    docker stop file-comparison
+    docker rm file-comparison
+    ```
 
 ## License
 
