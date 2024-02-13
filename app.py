@@ -1,18 +1,21 @@
 """
-A Flask web application to compare the content of two files or text inputs.
-
-This module utilizes the Flask framework to create a simple web interface where users can upload two files or input text into two separate forms. The application then compares the contents of these two inputs, using the `difflib` module, to generate a detailed, side-by-side comparison of the differences. The comparison highlights additions, deletions, and unchanged lines between the two inputs. The results are displayed in a user-friendly format, allowing for easy visualization of differences.
-
-The application supports both GET and POST requests, rendering an initial form for input on a GET request, and processing the submitted content on a POST request to display the comparison results.
-
+A Flask web application to compare the content of two files or text inputs. This module utilizes 
+the Flask framework to create a simple web interface where users can upload two files or input text
+into two separate forms. The application then compares the contents of these two inputs, using the 
+`difflib` module, to generate a detailed, side-by-side comparison of the differences. The 
+comparison highlights additions, deletions, and unchanged lines between the two inputs. The results
+are displayed in a user-friendly format, allowing for easy visualization of differences.
+The application supports both GET and POST requests, rendering an initial form for input on a GET
+request, and processing the submitted content on a POST request to display the comparison results.
 Dependencies:
-    - Flask: A micro web framework for Python, used for handling web requests and rendering templates.
-    - difflib: A module in the Python standard library, used to compare sequences, in this case, lines of text from the input files or texts.
+    - Flask: A micro web framework for Python, used for handling web requests 
+    and rendering templates.
+    - difflib: A module in the Python standard library, used to compare sequences,
+    in this case, lines of text from the input files or texts.
 """
 
 import difflib
 from flask import Flask, render_template, request
-
 
 app = Flask(__name__)
 
@@ -20,18 +23,19 @@ app = Flask(__name__)
 def index():
     """
     The main view function that handles requests to the root URL ('/').
-
-    On a GET request, this function renders an initial HTML form allowing the user to either upload two files or enter text into two separate input fields for comparison.
-
-    On a POST request, the function processes the uploaded files or entered text, compares the content using the `difflib.ndiff` method, and generates a list of differences. These differences are processed to support side-by-side comparison, distinguishing between added lines, deleted lines, and unchanged lines.
-
-    The comparison results are then rendered and displayed to the user in a 'results.html' template, providing a visual representation of differences between the two inputs.
-
+    On a GET request, this function renders an initial HTML form allowing the user to either upload
+    two files or enter text into two separate input fields for comparison.
+    On a POST request, the function processes the uploaded files or entered text, compares the 
+    content using the `difflib.ndiff` method, and generates a list of differences. These 
+    differences are processed to support side-by-side comparison, distinguishing between added 
+    lines, deleted lines, and unchanged lines.
+    The comparison results are then rendered and displayed to the user in a 'results.html' 
+    template, providing a visual representation of differences between the two inputs.
     Parameters:
     - None explicitly; uses `request` context from Flask to access submitted data.
-
     Returns:
-    - A rendered template: 'index.html' for a GET request, or 'results.html' with comparison results for a POST request.
+    - A rendered template: 'index.html' for a GET request, or 'results.html' with comparison 
+    results for a POST request.
     """
     if request.method == 'POST':
         # Initialize variables to store file or text content
