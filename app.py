@@ -67,7 +67,8 @@ def index():
 
         # Process unified diff
         unified_diff_processed = [(line, 'none') if line.startswith(' ') else (line, 'add')\
-                                  if line.startswith('+') else (line, 'del') for line in unified_diff]
+                                  if line.startswith('+') else (line, 'del')\
+                                    for line in unified_diff]
 
         # Process split diff for side-by-side comparison
         split_diff_left, split_diff_right = [], []
@@ -84,7 +85,8 @@ def index():
 
         # Render the comparison results
         return render_template('results.html', unified_diff=unified_diff_processed,\
-                               split_diff_left=split_diff_left, split_diff_right=split_diff_right, view_mode="split")
+                               split_diff_left=split_diff_left, split_diff_right=split_diff_right,\
+                                view_mode="split")
 
     return render_template('index.html')
 
