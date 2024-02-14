@@ -2,68 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparison Results</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            padding: 20px;
-            margin: 0;
-            overflow-x: hidden;
-        }
-        .diff-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .diff {
-            width: 49%;
-            border: 1px solid #ddd;
-            overflow-x: auto;
-            padding: 10px;
-            height: 80vh;
-            overflow-y: auto;
-        }
-        .line {
-            white-space: pre-wrap;
-            font-family: monospace;
-        }
-        .add { background-color: #e6ffed; }
-        .del { background-color: #ffeef0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 100%; width: 95%; margin-top: 20px; }
+        .diff-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+        .diff-full-screen { width: 100%;border: 1px solid #ddd; margin-top: 20px; overflow-x: auto; background-color: #f6f8fa; border-radius: 6px; }
+        .diff { border: 1px solid #ddd; padding: 10px; border-radius: 6px; background-color: #f6f8fa; overflow: auto; }
+        .line { padding: 0.5em 10px; font-family: monospace; font-size: 0.9em; border-left: 4px solid transparent; display: block; }
+        .file-header { background-color: #f6f8fa; font-weight: bold; }
+        .diff-header { background-color: #f6f8fa; color: #586069; }
+        .add { background-color: #e6ffed; border-left-color: #34d058; }
+        .del { background-color: #ffeef0; border-left-color: #d73a49; }
+        .none { background-color: #ffffff; }
+        .hidden { display: none; }
+        .switch-button { margin: 5px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; background-color: #007bff; color: white; }
+        #switchToUnified { background-color: #28a745; }
+        #switchToSplit { background-color: #555; } /* Different color for contrast */
+        h4 { background-color: #eee; padding: 5px; border-radius: 4px; }
     </style>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
     <h1>Comparison Results</h1>
-    <div class="diff-container">
-        <div class="diff" id="diff1">
-            <h2>File 1</h2>
-            {% for line, class in diff_left %}
+    <div>
+        <button id="switchToUnified" class="switch-button">Unified View</button>
+        <button id="switchToSplit" class="switch-button">Split View</button>
+    </div>
+
+    <!-- Unified View -->
+    <div id="unifiedView" class="diff-container hidden">
+        <div class="diff-full-screen">
+            {% for line, class in unified_diff %}
+                {% if line.startswith('---') or line.startswith('+++') %}
+                    <div class="line file-header">{{ line }}</div>
+                {% elif line.startswith('@@') %}
+                    <div class="line diff-header">{{ line }}</div>
+                {% else %}
+                    <div class="line {{class}}">{{ line }}</div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Split View -->
+    <div id="splitView" class="diff-container">
+        <div class="diff">
+            <h4>File 1</h4>
+            {% for line, class in split_diff_left %}
                 <div class="line {{class}}">{{ line }}</div>
             {% endfor %}
         </div>
-        <div class="diff" id="diff2">
-            <h2>File 2</h2>
-            {% for line, class in diff_right %}
+        <div class="diff">
+            <h4>File 2</h4>
+            {% for line, class in split_diff_right %}
                 <div class="line {{class}}">{{ line }}</div>
             {% endfor %}
         </div>
     </div>
-    <a href="/" class="btn btn-primary">Compare Other Files</a>
+
+    <a href="/" class="btn btn-primary mt-4">Compare Other Files</a>
+</br>
+</br>
+</br>
 </div>
+
 <script>
-    let scrollSync = function(source, target) {
-        source.addEventListener('scroll', () => {
-            target.scrollTop = source.scrollTop;
-        });
-    };
+    document.getElementById('switchToUnified').addEventListener('click', function() {
+        document.getElementById('unifiedView').classList.remove('hidden');
+        document.getElementById('splitView').classList.add('hidden');
+    });
 
-    let diff1 = document.getElementById('diff1');
-    let diff2 = document.getElementById('diff2');
-
-    scrollSync(diff1, diff2);
-    scrollSync(diff2, diff1);
+    document.getElementById('switchToSplit').addEventListener('click', function() {
+        document.getElementById('unifiedView').classList.add('hidden');
+        document.getElementById('splitView').classList.remove('hidden');
+    });
 </script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

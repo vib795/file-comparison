@@ -59,24 +59,29 @@ def index():
         file1_lines = file1_content.splitlines()
         file2_lines = file2_content.splitlines()
 
-        # Generate a diff
-        diff = difflib.ndiff(file1_lines, file2_lines)
+        # Generate unified diff
+        unified_diff = list(difflib.unified_diff(file1_lines, file2_lines, fromfile='file1', tofile='file2', lineterm=''))
+        # Generate split diff
+        diff = list(difflib.ndiff(file1_lines, file2_lines))
 
-        # Process diff for side-by-side comparison
-        diff_left, diff_right = [], []
+        # Process unified diff
+        unified_diff_processed = [(line, 'none') if line.startswith(' ') else (line, 'add') if line.startswith('+') else (line, 'del') for line in unified_diff]
+
+        # Process split diff for side-by-side comparison
+        split_diff_left, split_diff_right = [], []
         for line in diff:
             if line.startswith('-'):
-                diff_left.append((line[2:], 'del'))
-                diff_right.append(('', 'none'))
+                split_diff_left.append((line[2:], 'del'))
+                split_diff_right.append(('', 'none'))
             elif line.startswith('+'):
-                diff_left.append(('', 'none'))
-                diff_right.append((line[2:], 'add'))
+                split_diff_left.append(('', 'none'))
+                split_diff_right.append((line[2:], 'add'))
             elif line.startswith(' '):
-                diff_left.append((line[2:], 'none'))
-                diff_right.append((line[2:], 'none'))
+                split_diff_left.append((line[2:], 'none'))
+                split_diff_right.append((line[2:], 'none'))
 
         # Render the comparison results
-        return render_template('results.html', diff_left=diff_left, diff_right=diff_right)
+        return render_template('results.html', unified_diff=unified_diff_processed, split_diff_left=split_diff_left, split_diff_right=split_diff_right, view_mode="split")
 
     return render_template('index.html')
 
