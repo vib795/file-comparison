@@ -60,12 +60,14 @@ def index():
         file2_lines = file2_content.splitlines()
 
         # Generate unified diff
-        unified_diff = list(difflib.unified_diff(file1_lines, file2_lines, fromfile='file1', tofile='file2', lineterm=''))
+        unified_diff = list(difflib.unified_diff(file1_lines, file2_lines, fromfile='file1', 
+                                                 tofile='file2', lineterm=''))
         # Generate split diff
         diff = list(difflib.ndiff(file1_lines, file2_lines))
 
         # Process unified diff
-        unified_diff_processed = [(line, 'none') if line.startswith(' ') else (line, 'add') if line.startswith('+') else (line, 'del') for line in unified_diff]
+        unified_diff_processed = [(line, 'none') if line.startswith(' ') else (line, 'add') 
+                                  if line.startswith('+') else (line, 'del') for line in unified_diff]
 
         # Process split diff for side-by-side comparison
         split_diff_left, split_diff_right = [], []
@@ -81,7 +83,8 @@ def index():
                 split_diff_right.append((line[2:], 'none'))
 
         # Render the comparison results
-        return render_template('results.html', unified_diff=unified_diff_processed, split_diff_left=split_diff_left, split_diff_right=split_diff_right, view_mode="split")
+        return render_template('results.html', unified_diff=unified_diff_processed, 
+                               split_diff_left=split_diff_left, split_diff_right=split_diff_right, view_mode="split")
 
     return render_template('index.html')
 
